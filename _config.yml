@@ -14,16 +14,16 @@ timezone: Asia/Seoul
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: juhyeongkim # the main title
+title: Juhyeong Kim # the main title
 
-tagline: juhyeongkim # it will display as the subtitle
+tagline: Security Blog # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
-  juhyeongkim
+  Juhyeong Kim's Security Blog
 
 # Fill in the protocol & hostname for your site.
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
-url: "https://juhyeongkim.github.io"
+url: "https://juhyeongkim527.github.io"
 
 github:
   username: juhyeongkim527 # change to your GitHub username
