@@ -4,7 +4,7 @@ description: Dremhack [Wargame] - Carve Party
 author: juhyeongkim
 date: 2024-10-31 21:02:00 +0900
 categories: [Dreamhack, Wargame]
-tags: [Dreamhack, Wargame, Pwnable]
+tags: [Dreamhack, Wargame, Web]
 # toc: false
 # comments: false
 # math: true
