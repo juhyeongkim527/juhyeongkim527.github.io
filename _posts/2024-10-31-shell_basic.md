@@ -27,9 +27,11 @@ tags: [Dreamhack, Wargame, Pwnable]
 
 ## 풀이 방법 1. c언어 skeleton 코드 이용
 
-- **1.~5. 까지는 원격 서버에 byte code(opcode)를 추출하여 shellcode를 전달하기 위한 부분이고 6.이 실제 공격 과정이다.**
+**1.~5. 까지는 원격 서버에 byte code(opcode)를 추출하여 shellcode를 전달하기 위한 부분이고 6.이 실제 공격 과정이다.**
 
-1. 먼저 orw 쉘 코드를 작성 후 skeleton 코드를 통해 실행 파일(ELF) 파일을 생성한다.
+### 1.
+
+먼저 orw 쉘 코드를 작성 후 skeleton 코드를 통해 실행 파일(ELF) 파일을 생성한다.
 
 ```c
 // File name: orw.c
@@ -76,32 +78,57 @@ void run_sh();
 int main() { run_sh(); }
 ```
 
-먼저 open콜에서 rsp에 문자열을 넣어준다. 여기서 리틀엔디언 저장 방식에 주의해주고, 맨 윗 줄에 push 0x0을 해준 이유는 기존 스택에서 문자열 이후에 저장된 값때매 정확히 문자열이 ng에서 끊기지 않을 수 있기 때문에 null 문자를 넣어주기 위함이다.
+먼저 `open`콜에서 `rsp`에 문자열을 넣어준다. 여기서 **리틀엔디언** 저장 방식에 주의해야한다. 
 
-- 참고로 push 콜을 통해서는 최대 32비트 크기의 값밖에 못넣기 때문에 rax에 64비트 값을 먼저 mov 후 rax값을 push한다.
+맨 윗 줄에 `push 0x0`을 해준 이유는, 기존 스택에서 문자열 이후에 저장된 값으로 인해 정확히 문자열이 ng에서 끊기지 않을 수 있기 때문에 `null` 문자를 넣어주기 위함이다.
 
-- 그리고, 8바이트 크기의 문자열이라도 rdi에 바로 문자열을 대입하면 안되고 rsp를 통해 `mov rdi, rsp`를 해줘야 하는 이유는,  
+참고로 `push` 콜을 통해서는 최대 32비트 크기의 값밖에 못넣기 때문에 `rax`에 64비트 값을 먼저 `mov` 후 `rax`값을 `push`한다.
 
-open 콜에서 첫번째 인자인 `filename`은 **`char형`이 아닌 `char*` 형이기 때문에**, rsp에 문자열을 저장하고 rdi에는 rsp의 주소를 저장해야 한다.
+그리고, 8바이트 크기의 문자열이라도 `rdi`에 바로 문자열을 대입하면 안되고 `rsp`를 통해 `mov rdi, rsp`를 해줘야 하는 이유는,  
 
-2. 차례대로 open, read, write 콜 이후 `rdi = 0x00(에러코드), rax = 0x3c`를 대입해 `exit(0)` 시스템 콜을 발생 후 종료한다.
+`open` 콜에서 첫번째 인자인 `filename`은 **`char형`이 아닌 `char*` 형이기 때문에**, `rsp`에 문자열을 저장하고 `rdi`에는 `rsp`의 주소를 저장해야 한다.
 
-3. 이후 `gcc -o  orw orw.c` 명령어를 통해 orw ELF 파일을 생성 후 `objdump -d orw`를 통해 orw의 디스어셈블(-d 옵션) 결과를 확인한다.
-- objdump란, 쉽게 바이너리(ELF파일)의 정보를 보여주는 명령어라고 생각하면 됨 ELF executable 파일만 objdump 가능하므로 .o 파일(ELF relocatable 파일)은 불가능
+### 2.
 
-4. orw 파일은 순수 어셈블리어 파일(.asm)이 아니므로 위 3. 결과에서 우리가 필요한 <run_sh> 함수 부분의 기계어 코드만 추출할 수 있도록 한다. <img width="840" alt="image" src="https://github.com/juhyeongkim527/Dreamhack-Study/assets/138116436/b853b579-a05c-4f6a-8f10-a75918fbcbd4">
+차례대로 open, read, write 콜 이후 `rdi = 0x00(에러코드), rax = 0x3c`를 대입해 `exit(0)` 시스템 콜을 발생 후 종료한다.
 
-5. 해당 부분을 opcode로 변경하기 위해,     
+### 3.
+
+이후 `gcc -o  orw orw.c` 명령어를 통해 orw ELF 파일을 생성 후 `objdump -d orw`를 통해 orw의 디스어셈블(-d 옵션) 결과를 확인한다.
+
+`objdump`란, 쉽게 바이너리(ELF파일)의 정보를 보여주는 명령어라고 생각하면 된다. 
+
+**ELF executable** 파일만 `objdump` 가능하므로, **.o 파일(ELF relocatable 파일)**은 불가능하다.
+
+### 4. 
+
+orw 파일은 순수 어셈블리어 파일(.asm)이 아니므로 바로 위 3.의 결과에서 우리가 필요한 `<run_sh>` 함수 부분의 기계어 코드만 추출할 수 있도록 한다. 
+
+<img width="840" alt="image" src="https://github.com/juhyeongkim527/Dreamhack-Study/assets/138116436/b853b579-a05c-4f6a-8f10-a75918fbcbd4">
+
+### 5.
+
+해당 부분을 opcode로 변경하기 위해,  
+
 `for i in $(objdump -d orw | grep "" | cut -f 2); do echo -n \\x$i; done`를 통해 hex 형식으로 변환 후 우리가 필요한 <run_sh> 부분만 확인하여 복사한다.
+
 - `for i in $( )` : $( ) 내의 명령을 실행한 값을 반복하여 i로 접근
+
 - `objdump -d [file_path]` : [file] 경로의 오브젝트 파일을 기계어로 역어셈블
-- `grep "^ "` : 공백으로 시작하는 문자열 탐색 (ELF파일에 기계어는 ^뒤에 있으므로)<img width="829" alt="image" src="https://github.com/juhyeongkim527/Dreamhack-Study/assets/138116436/f56e9700-64ec-421b-82bf-6ec869e64427">
+
+- `grep "^ "` : 공백으로 시작하는 문자열 탐색 (ELF파일에 기계어는 ^뒤에 있으므로)
+
+<img width="829" alt="image" src="https://github.com/juhyeongkim527/Dreamhack-Study/assets/138116436/f56e9700-64ec-421b-82bf-6ec869e64427">
 
 - `cut -f 2` : 문자열의 2번째 필드만 추출
+
 - `do echo -n \\x$i` : “\x” + 변수 i 값을 줄바꿈 없이 출력
+
 - `done` : 반복문 종료 
 
-6. 이후 pwntools를 이용하여 실제 원격 서버에 공격을 위한 python 파일을 생성 후 공격한다.
+### 6.
+
+이후 pwntools를 이용하여 실제 원격 서버에 공격을 위한 python 파일을 생성 후 공격한다.
 
 ```py
 from pwn import *
@@ -120,7 +147,11 @@ print(p.recvuntil(b'}'))
 
 ## 풀이방법 2. 어셈블리어 코드(.asm) 작성
 
-1. 위에서 skeleton 코드를 작성한 것과 달리 어셈블리어 코드를 작성하여 object파일 생성 후 이를 통해 opcode를 얻는 방법이다. 이를 위해 .asm 코드를 작성해준다.
+### 1.
+
+위에서 skeleton 코드를 작성한 것과 달리 어셈블리어 코드를 작성하여 object파일 생성 후 이를 통해 opcode를 얻는 방법이다. 
+
+이를 위해 .asm 코드를 작성해준다.
 
 ```
 section .text ; 섹션을 정해주는 부분 같음
@@ -161,27 +192,46 @@ start:
     syscall
 ```
 
-2. 위 코드를 object 코드(Object 코드, ELF relocatable 기계어 코드)로 변환하기 위해 `nasm -f elf64 orw.asm` 명령어를 실행하면 `orw.o` 파일 생성
-- 여기서 **nasm**은 어셈블리어 코드를 기계어 코드로 **어셈블** 해주는 명렁어이다. gcc -c 옵션으로 불가능한 이유는 gcc는 기본적으로 c언어 소스파일에 사용가능하기 때문에 어셈블리어 코드에는 사용 불가능
+### 2.
 
-3. 생성한 orw.o 파일에서 opcode를 가져오기 위해 `objcopy —-dump-section .text=orw.bin orw.o`를 통해 `orw.bin` 파일을 생성 후 `xxd orw.bin` 명령어를 통해 hex 형식의 기계어 코드를 확인
-- 여기서 **objcopy**는 Object 파일을 복사하고 조작하는데 사용하는 명령어이다.   
-여기서 `--dump-section` 명령어를 뒤의 section 부분을 새로 생성한 파일에 copy하는 옵션이다. `objdump`를 사용하지 않는 이유는 object 파일은 ELF executable 파일이 아닌 ELF relocatable 파일이기 때문이다.
+위 코드를 object 코드(Object 코드, ELF relocatable 기계어 코드)로 변환하기 위해 `nasm -f elf64 orw.asm` 명령어를 실행하면 `orw.o` 파일 생성한다.
 
-4. 여기서 opcode를 \x 형식으로 가져오기 위해 `xxd -p orw.bin | sed 's/\(..\)/\\x\1/g' | awk '{printf "%s", $0}'` 명령어 실행
+여기서 **nasm**은 어셈블리어 코드를 기계어 코드로 **어셈블** 해주는 명령어이다. 
+
+`gcc -c` 옵션으로 불가능한 이유는 gcc는 기본적으로 c언어 소스파일에 사용가능하기 때문에 어셈블리어 코드에는 사용할 수 없다.
+
+### 3.
+
+생성한 orw.o 파일에서 opcode를 가져오기 위해 `objcopy —-dump-section .text=orw.bin orw.o`를 통해 `orw.bin` 파일을 생성 후 `xxd orw.bin` 명령어를 통해 hex 형식의 기계어 코드를 확인한다.
+
+여기서 `objcopy`는 Object 파일을 복사하고 조작하는데 사용하는 명령어이다.
+
+그리고 `--dump-section` 명령어를 뒤의 section 부분을 새로 생성한 파일에 copy하는 옵션이다. 
+
+`objdump`를 사용하지 않는 이유는 **object** 파일은 **ELF executable** 파일이 아닌 **ELF relocatable** 파일이기 때문이다.
+
+### 4.
+
+여기서 opcode를 \x 형식으로 가져오기 위해 `xxd -p orw.bin | sed 's/\(..\)/\\x\1/g' | awk '{printf "%s", $0}'` 명령어를 실행한다.
+
 - `xxd -p example.bin`: 이 명령은 이진 파일 example.bin의 내용을 일반 16진수 형식으로 덤프
+
 - `sed 's/\(..\)/\\x\1/g'`: 이 sed 명령은 모든 두 문자 (바이트)를 캡처하고 캡처된 문자 뒤에 \x를 붙여 이를 대체함, 이를 통해 각 바이트를 \xHH 형식으로 변환
+
 - `awk '{printf "%s", $0}'`: 이 awk 명령은 줄 바꿈을 추가하지 않고 출력을 출력함, 이를 통해 전체 16진수 배열이 한 줄로 출력
 
 - `xxd -p orw.bin | sed 's/\(..\)/\\x\1/g | tr -d '\n'`도 가능
 
-5. 이후 과정은 python 파일 작성 부분으로 풀이 방법 1과 동일
+### 5.
+
+이후 과정은 python 파일 작성 부분으로 풀이 방법 1과 동일
 
 <br>
 
 ## 풀이방법 3. pwntools의 shellcraft를 사용
 
-1.
+### 1.
+
 ```py
 from pwn import *
 
@@ -200,7 +250,8 @@ p.sendlineafter('shellcode: ', shellcode)
 print(p.recvuntil(b'}'))
 ```
 
-2.
+### 2.
+
 ```py
 from pwn import *
 
@@ -220,7 +271,8 @@ p.sendlineafter('shellcode: ', shellcode)
 print(p.recvuntil(b'}'))
 ```
 
-3.
+### 3.
+
 ```py
 from pwn import *
 
@@ -235,7 +287,7 @@ print(p.recvuntil(b'}'))
 
 <br>
 
-### 참고 정리
+## 참고 정리
 
 - `orw.c->orw` : `gcc -o orw orw.c`
 - `orw.asm->orw.o` : `nasm -f elf64 orw.asm`

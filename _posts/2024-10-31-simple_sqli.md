@@ -152,7 +152,7 @@ SQL Injection으로 로그인 인증을 우회하여 로그인만 하는 방법�
 
 `userid`의 입력 값을 통해 쿼리문을 조작하여 `admin` 계정으로 로그인할 수 있도록, `query_db` 함수의 `rv[0]` 값이 `admin` 계정을 나타내는 행을 리턴하는 다양한 공격문을 아래와 같이 작성해볼 수 있다.
 
----
+#### 1.
 
 `userid` : `admin" --` 입력, 
 
@@ -160,7 +160,7 @@ SQL Injection으로 로그인 인증을 우회하여 로그인만 하는 방법�
 
 - `select * from users where userid="admin" --" and userpassword="random"`
 
----
+#### 2.
 
 `userid` : `admin" or 1"` 입력
 
@@ -170,10 +170,11 @@ SQL Injection으로 로그인 인증을 우회하여 로그인만 하는 방법�
 
 참고로 주의할 점이, `userid`에 `admin" or 1 --`을 입력하면, 항상 참이 되어 모든 행을 가져오는데, `guest`가 테이블에서 첫 번째 행이므로 `rv[0]`이 `guest`를 리턴해서 `hello guest`가 출력된다.
 
-`select * from users where userid="admin" or "1" and userpassword="random"`은 `select * from users where userid="admin" or userpassword="random"`으로 연산자 우선 순위에 의해 바뀌기 때문에 `"admin"`계정의 행이 리턴되게 된다.\
-(`and` 연산자의 우선 순위가 `or`보다 높아서 `("1" and userpassword="random")`가 먼저 계산되어 `userpassword="random"`으로 합쳐지기 때문)
+`select * from users where userid="admin" or "1" and userpassword="random"`은 `select * from users where userid="admin" or userpassword="random"`으로 연산자 우선 순위에 의해 바뀌기 때문에 `"admin"`계정의 행이 리턴되게 된다.
 
----
+`and` 연산자의 우선 순위가 `or`보다 높아서 `("1" and userpassword="random")`가 먼저 계산되어 `userpassword="random"`으로 합쳐지기 때문이다.
+
+#### 3.
 
 `userid` : `random` 입력
 
@@ -183,7 +184,7 @@ SQL Injection으로 로그인 인증을 우회하여 로그인만 하는 방법�
 
 앞에서 설명한 연산자 우선 순위에 의해 `AND` 부분부터 연산되는데, 해당 결과는 `FALSE`이므로 결국 `userid="admin"`인 행만 리턴하게 된다.
 
----
+#### 4.
 
 `userid` : `random` 입력
 
@@ -195,7 +196,7 @@ SQL Injection으로 로그인 인증을 우회하여 로그인만 하는 방법�
 
 `LIMIT`의 첫 번째 인자는 `시작 인덱스`이고, 두 번째 인자는 `리턴할 행의 개수`이다. (`0-index`)
 
----
+#### 5.
 
 이렇게 여러 쿼리문을 통해 SQL Injection 공격을 수행하면 아래와 같이 `FLAG`를 `return` 하여 출력하게 된다.
 
@@ -229,17 +230,25 @@ SQL Injection으로 로그인 인증을 우회하여 로그인만 하는 방법�
 
 자동화 스크립트에 쿼리문을 작성하려면, 로그인할 때 전송하는 `POST` 데이터의 구조를 파악해야 한다. 과정은 아래와 같다.
 
-1. 개발자 도구의 `Network` 탭을 열고, `Preserve log` 클릭 (`Preserve log`는 페이지를 이동하거나 새로고침해도 네트워크 로그들을 지우지 않고 유지해줌)
+##### 1.
+
+개발자 도구의 `Network` 탭을 열고, `Preserve log` 클릭 (`Preserve log`는 페이지를 이동하거나 새로고침해도 네트워크 로그들을 지우지 않고 유지해줌)
 
 <img width="1540" alt="image" src="https://github.com/user-attachments/assets/05875111-0d4e-4a25-8f4e-0cd875aa47e8">
 
-2. `userid`와 `userpassword`에 "guest"를 입력 후 Login 버튼 클릭
+##### 2.
 
-3. Network 탭의 메시지 목록에서 `POST` 요청 찾기 (`GET`은 폼 데이터가 존재하지 않음)
+`userid`와 `userpassword`에 "guest"를 입력 후 Login 버튼 클릭
+
+##### 3.
+
+Network 탭의 메시지 목록에서 `POST` 요청 찾기 (`GET`은 폼 데이터가 존재하지 않음)
 
 <img width="702" alt="image" src="https://github.com/user-attachments/assets/760b792e-136d-4748-830b-b528586a42cf">
 
-4. `Payload`에서 `Form Data` 구조 확인
+##### 4.
+
+`Payload`에서 `Form Data` 구조 확인
 
 <img width="699" alt="image" src="https://github.com/user-attachments/assets/76eb756e-915b-423c-9836-3f858c70fcd5">
 

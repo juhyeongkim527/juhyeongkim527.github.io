@@ -386,7 +386,7 @@ $1 = 0x3ebca0
 
 <br>
 
-### 2. `fptr` Overwrite
+### 2. **fptr** Overwrite
 
 이제 `libc base`의 값을 구했기 때문에 `libc base`에 원가젯의 주소를 더해서, `human_func` 함수에서 `human->age`에 해당 주소를 대입해주면 된다.
 
