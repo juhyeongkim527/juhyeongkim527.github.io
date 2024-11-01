@@ -4,7 +4,7 @@ description: Dreamhack [Wargame] - Return to Shellcode
 author: juhyeongkim
 date: 2024-10-31 00:00:00 +0900
 categories: [Dreamhack, Wargame]
-tags: [Dreamhack, Wargame, Pwanble]
+tags: [Dreamhack, Wargame, Pwnable]
 # toc: false
 # comments: false
 # math: true
