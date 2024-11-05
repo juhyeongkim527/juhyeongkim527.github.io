@@ -1,5 +1,5 @@
 ---
-title: Carve Party
+title: '[Dreamhack] Carve Party'
 description: Dremhack [Wargame] - Carve Party
 author: juhyeongkim
 date: 2024-10-31 21:02:00 +0900

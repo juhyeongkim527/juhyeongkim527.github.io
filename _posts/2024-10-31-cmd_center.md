@@ -1,5 +1,5 @@
 ---
-title: cmd_center
+title: '[Dreamhack] cmd_center'
 description: Dreamhack [Wargame] - cmd_center
 author: juhyeongkim
 date: 2024-10-31 6:20:00 +0900

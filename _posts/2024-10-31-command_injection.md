@@ -1,5 +1,5 @@
 ---
-title: Command Injection
+title: '[Dreamhack] Command Injection'
 description: Dreamhack [Learn] - Command Injection
 author: juhyeongkim
 date: 2024-10-31 08:00:00 +0900

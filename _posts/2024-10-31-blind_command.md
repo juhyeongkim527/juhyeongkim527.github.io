@@ -1,5 +1,5 @@
 ---
-title: blind-command
+title: '[Dreamhack] blind-command'
 description: Dremhack [Wargame] - blind-command
 author: juhyeongkim
 date: 2024-10-31 21:02:00 +0900

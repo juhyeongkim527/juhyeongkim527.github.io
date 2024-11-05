@@ -1,5 +1,5 @@
 ---
-title: shell_basic
+title: '[Dreamhack] shell_basic'
 description: Dremhack [Wargame] - shell_basic
 author: juhyeongkim
 date: 2024-10-31 08:00:00 +0900

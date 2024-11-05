@@ -1,5 +1,5 @@
 ---
-title: tcache_dup
+title: '[Dreamhack] tcache_dup'
 description: Dremhack [Wargame] - tcache_dup
 author: juhyeongkim
 date: 2024-10-31 08:00:00 +0900

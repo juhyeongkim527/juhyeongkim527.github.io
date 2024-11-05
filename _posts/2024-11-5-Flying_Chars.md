@@ -1,5 +1,5 @@
 ---
-title: Flying Chars
+title: '[Dreamhack] Flying Chars'
 description: Dreamhack [Wargame] - Flying Chars 
 author: juhyeongkim
 date: 2024-11-05 09:38:00 +0900

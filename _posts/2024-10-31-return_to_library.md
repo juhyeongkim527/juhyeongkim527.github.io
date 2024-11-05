@@ -1,5 +1,5 @@
 ---
-title: Return to Library
+title: '[Dreamhack] Return to Library'
 description: Dremhack [Wargame] - Return to Library
 author: juhyeongkim
 date: 2024-10-31 08:00:00 +0900

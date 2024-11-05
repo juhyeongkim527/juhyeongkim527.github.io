@@ -1,5 +1,5 @@
 ---
-title: Format String Bug
+title: '[Dreamhack] Format String Bug'
 description: Dreamhack [Wargame] - Format String Bug
 author: juhyeongkim
 date: 2024-10-31 00:00:00 +0900

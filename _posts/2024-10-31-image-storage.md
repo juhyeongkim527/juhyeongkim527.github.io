@@ -1,5 +1,5 @@
 ---
-title: image-storage
+title: '[Dreamhack] image-storage'
 description: Dreamhack [Wargame] - image-storage
 author: juhyeongkim
 date: 2024-10-31 00:00:00 +0900

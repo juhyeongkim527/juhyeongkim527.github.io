@@ -1,5 +1,5 @@
 ---
-title: file-download-1
+title: '[Dreamhack] file-download-1'
 description: Dreamhack [Wargame] - file-download-1
 author: juhyeongkim
 date: 2024-10-31 00:00:00 +0900

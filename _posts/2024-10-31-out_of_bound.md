@@ -1,5 +1,5 @@
 ---
-title: out_of_bound
+title: '[Dreamhack] out_of_bound'
 description: Dremhack [Wargame] - out_of_bound
 author: juhyeongkim
 date: 2024-10-31 08:00:00 +0900

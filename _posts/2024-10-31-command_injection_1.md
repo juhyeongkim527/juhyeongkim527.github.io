@@ -1,5 +1,5 @@
 ---
-title: command-injection-1
+title: '[Dreamhack] command-injection-1'
 description: Dremhack [Wargame] - command-injection-1
 author: juhyeongkim
 date: 2024-10-31 21:02:00 +0900
