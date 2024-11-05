@@ -253,4 +253,22 @@ for (var i = 0; i < 20; i++) {
 
 ![image_3](assets/img/Flying_Chars/image_3.png)
 
+<br>
+
+### 참고(내용 추가 필요)
+
+`Console` 탭에서 `dis = 0`으로 세팅 후 `move()`를 호출해주어도, 처음에 웹사이트를 랜더링할 때 수행된 아래의 코드에서 세팅된 `dis` 값으로 계속 `move()` 함수가 호출되고 있을 것이라고 생각이 들었다.
+
+```javascript
+for (var i = 0; i < 20; i++) {
+    anim(imgs[i], 0, Math.random() * 60 + 20);
+}
+```
+
+그럼 `dis` 값이 2개인데, `requestAnimationFrame(move)`는 어떤 `dis` 값을 가지는 `move()` 함수를 호출하는지 궁금했다.
+
+완전히 자세히 찾아보지는 않아서 정확하지는 않지만, 클로저 함수의 동작 방식 때문에 마지막에 호출된 `move()` 함수로 덮어씌워지게 되어서 `dis = 0`인 `move()` 함수가 호출된다고 한다.
+
+자바스크립트에 대해서 더 공부해본 후 이 내용을 다시 찾아봐야겠다.
+
 {% endraw %}
