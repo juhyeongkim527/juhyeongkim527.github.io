@@ -15,7 +15,7 @@ tags: [Dreamhack, Wargame, Web]
     # alt: 
 ---
 
-[문제 링크](simple-web-request')
+[문제 링크](https://dreamhack.io/wargame/challenges/830)
 
 {% raw %}
 
