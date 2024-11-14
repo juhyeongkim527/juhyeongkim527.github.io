@@ -42,11 +42,11 @@ org_name = DH{THIS_IS_FAKE_FLAG}
 
 따라서 아래와 같이 문제에서 제공하는 웹페이지에서 로그인한 후,
 
-![image](assets/web-misconf-1/image_1.png)
+![image](assets/img/web-misconf-1/image_1.png)
 
 `.ini` 설정 파일이 반영된 **Settings**에 들어가면 `org_name` 필드에서 플래그를 확인할 수 있다.
 
-![image](assets/web-misconf-1/image_2.png)
+![image](assets/img/web-misconf-1/image_2.png)
 
 <br>
 
